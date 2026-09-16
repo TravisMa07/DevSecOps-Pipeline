@@ -1,6 +1,8 @@
 from fastapi import FastAPI
+from app.api.vulnerabilities import router
 
 app = FastAPI(title="Vulnerability API")
+app.include_router(router)
 
 @app.get("/")
 def read_root():
@@ -9,18 +11,3 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "OK"}
-
-@app.get("/vulnerabilities")
-def get_vulnerabilities():
-    # placeholder for fetching vulnerabilities from a database or external source
-    return {"vulnerabilities": []}
-
-@app.get("/vulnerabilities/{vuln_id}")
-def get_vulnerability(vuln_id: str):
-    # placeholder for fetching a specific vulnerability by ID (e.g: CVE-XXXX-XXXX)
-    return {"vulnerability": {"id": vuln_id, "description": "Details about the vulnerability."}}
-
-@app.post("/vulnerabilities")
-def create_vulnerability(vulnerability: dict):
-    # placeholder for creating a new vulnerability
-    return {"vulnerability": vulnerability}

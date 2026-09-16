@@ -18,3 +18,8 @@ coverage.xml
 .env
 .env.*
 !.env.example
+
+# Python packaging output
+*.egg-info/
+build/
+dist/

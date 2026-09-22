@@ -22,3 +22,6 @@ jobs:
 
       - name: Run lint
         run: python -m ruff check .
+
+      - name: Build Docker image
+        run: docker build -t vulnerability-api .

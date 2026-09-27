@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from app.models.vulnerability import Vulnerability
+from app.models.vulnerability import VulnerabilityCreate, VulnerabilityUpdate
 from app.services import vulnerability_service
 
 router = APIRouter(prefix="/vulnerabilities", tags=["vulnerabilities"])
@@ -21,7 +21,7 @@ def get_vulnerability(vulnerability_id: str):
 
 
 @router.post("", status_code=201)
-def create_vulnerability(vulnerability: Vulnerability):
+def create_vulnerability(vulnerability: VulnerabilityCreate):
     try:
         record = vulnerability_service.create_vulnerability(vulnerability)
     except ValueError as e:
@@ -30,7 +30,7 @@ def create_vulnerability(vulnerability: Vulnerability):
     return {"vulnerability": record}
 
 @router.put("/{vulnerability_id}")
-def update_vulnerability(vulnerability_id: str, updated_vulnerability: Vulnerability):
+def update_vulnerability(vulnerability_id: str, updated_vulnerability: VulnerabilityUpdate):
     try:
         record = vulnerability_service.update_vulnerability(vulnerability_id, updated_vulnerability)
     except ValueError as e:

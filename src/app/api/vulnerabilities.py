@@ -28,3 +28,22 @@ def create_vulnerability(vulnerability: Vulnerability):
         raise HTTPException(status_code=400, detail=str(e))
 
     return {"vulnerability": record}
+
+@router.put("/{vulnerability_id}")
+def update_vulnerability(vulnerability_id: str, updated_vulnerability: Vulnerability):
+    try:
+        record = vulnerability_service.update_vulnerability(vulnerability_id, updated_vulnerability)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    
+    return {"vulnerability": record}
+
+@router.delete("/{vulnerability_id}", status_code=204)
+def delete_vulnerability(vulnerability_id: str):
+    try:
+        vulnerability_service.delete_vulnerability(vulnerability_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+    return {"message": f"Vulnerability with ID {vulnerability_id} has been deleted."}
+

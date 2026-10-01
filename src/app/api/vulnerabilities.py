@@ -1,18 +1,25 @@
 from fastapi import APIRouter, HTTPException
 
-from app.models.vulnerability import VulnerabilityCreate, VulnerabilityUpdate
+from app.models.vulnerability import (
+    VulnerabilityCreate,
+    VulnerabilityListResponse,
+    VulnerabilityResponseEnvelope,
+    VulnerabilityUpdate,
+)
 from app.services import vulnerability_service
 
 router = APIRouter(prefix="/vulnerabilities", tags=["vulnerabilities"])
 
 
-@router.get("")
+
+@router.get("", response_model=VulnerabilityListResponse)
 def list_vulnerabilities():
     records = vulnerability_service.list_vulnerabilities()
     return {"vulnerabilities": records}
 
 
-@router.get("/{vulnerability_id}")
+
+@router.get("/{vulnerability_id}", response_model=VulnerabilityResponseEnvelope)
 def get_vulnerability(vulnerability_id: str):
     record = vulnerability_service.get_vulnerability(vulnerability_id)
     if record is None:
@@ -20,7 +27,8 @@ def get_vulnerability(vulnerability_id: str):
     return {"vulnerability": record}
 
 
-@router.post("", status_code=201)
+
+@router.post("", status_code=201, response_model=VulnerabilityResponseEnvelope)
 def create_vulnerability(vulnerability: VulnerabilityCreate):
     try:
         record = vulnerability_service.create_vulnerability(vulnerability)
@@ -29,7 +37,7 @@ def create_vulnerability(vulnerability: VulnerabilityCreate):
 
     return {"vulnerability": record}
 
-@router.put("/{vulnerability_id}")
+@router.put("/{vulnerability_id}", response_model=VulnerabilityResponseEnvelope)
 def update_vulnerability(vulnerability_id: str, updated_vulnerability: VulnerabilityUpdate):
     try:
         record = vulnerability_service.update_vulnerability(vulnerability_id, updated_vulnerability)
@@ -38,7 +46,7 @@ def update_vulnerability(vulnerability_id: str, updated_vulnerability: Vulnerabi
     
     return {"vulnerability": record}
 
-@router.delete("/{vulnerability_id}", status_code=204)
+@router.delete("/{vulnerability_id}", status_code=200)
 def delete_vulnerability(vulnerability_id: str):
     try:
         vulnerability_service.delete_vulnerability(vulnerability_id)
